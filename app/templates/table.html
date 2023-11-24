@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<table align="center" border="1" class="dataframe">
+<!--    <thead>-->
+<!--        <tr style="text-align: left;">-->
+<!--            {% for key in data[0] %}-->
+<!--                <th>{{ key }}</th>-->
+<!--            {% endfor %}-->
+<!--        </tr>-->
+<!--    </thead>-->
+    <tbody>
+        {% for dict in data %}
+            <tr>
+            {% for key, value in dict.items() %}
+                {% if key == "Link" %}
+                    <td>
+                        <a href="{{ value }}">Auction Link</a>
+                    </td>
+                {% elif key == "Price" %}
+                    <td>€{{ value }}</td>
+                {% elif key == "Img" %}
+                    <td>
+                        <div class="product-image">
+                            <img src="{{ value }}" width="30%">
+                        </div>
+                    </td>
+                {% elif key == "Item" %}
+                    <td>{{ value }}</td>
+                {% elif key == "Msg" %}
+                    <td>{{ value }}</td>
+                {% endif %}
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,132 @@
+*{
+	margin:0;
+	padding:0;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+td{
+    padding: 5px;
+    text-align: center
+}
+
+.product-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+body{
+	font-size:13px;
+	color:#eee;
+	font-family:Arial, Helvetica, sans-serif;
+	background:url('img/bg.jpg') repeat-x #718693;
+}
+
+#page{
+	/* The main container div */
+	width:720px;
+	margin:100px auto 0;
+}
+
+h1{
+	font-family:Corbel,'Myriad Pro',Arial, Helvetica, sans-serif;
+	background:url('img/heading.png') no-repeat center top;
+	text-indent:-9999px;
+	overflow:hidden;
+	height:90px;
+}
+
+
+
+#searchForm{
+	/* The search form. */
+	background-color:#4C5A65;
+	padding:50px 100px 40px;
+	margin:80px 0;
+	position:relative;
+
+	-moz-border-radius:16px;
+	-webkit-border-radius:16px;
+	border-radius:16px;
+}
+
+fieldset{
+	border:none;
+}
+
+
+#searchInputContainer{
+	/* This div contains the transparent search box */
+	width:420px;
+	height:36px;
+	background:url("img/searchBox.png") no-repeat;
+	float:left;
+	margin-right:12px;
+}
+
+input[type="checkbox"] {
+    margin:5px;
+}
+
+#s{
+	/* The search text box. */
+	
+	border:none;
+	color:#888888;
+	background:url("img/searchBox.png") no-repeat;
+	
+	float:left;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:15px;
+	height:36px;
+	line-height:36px;
+	margin-right:12px;
+	outline:medium none;
+	padding:0 0 0 35px;
+	text-shadow:1px 1px 0 white;
+	width:385px;
+}
+
+/* The submit button */
+
+
+#submitButton{
+	background:url('img/buttons.png') no-repeat;
+	width:83px;
+	height:36px;
+	text-indent:-9999px;
+	overflow:hidden;
+	text-transform:uppercase;
+	border:none;
+	cursor:pointer;
+}
+
+#submitButton:hover{
+	background-position:left bottom;
+}
+
+/* Styling the search results */
+
+
+.pageContainer{
+	/* Holds each page with search results. Has an inset bottom border. */
+	border-bottom:1px solid #5e7481;
+	margin-bottom:50px;
+
+	/* Adding a dark bottom border with box shadow */
+
+	-moz-box-shadow:0 1px 0 #798e9c;
+	-webkit-box-shadow:0 1px 0 #798e9c;
+	box-shadow:0 1px 0 #798e9c;
+}
+
+
+p.notFound{
+	text-align:center;
+	padding:0 0 40px;
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Price Comparison</title>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    </head>
+    <body>
+        <div id="page">
+            <h1>Price Comparison</h1>
+
+            <form action="/search" id="searchForm" method="post">
+                <fieldset>
+                    <input id="s" name="comment.s" type="text">
+                    <input type="submit" value="Submit" id="submitButton">
+
+                    <div id="searchInContainer">
+                        <label><input type="checkbox" name="check" value="1">New Items</label>
+                        <label><input type="checkbox" name="check" value="2">Used Items</label>
+                    </div>
+                </fieldset>
+            </form>
+
+            <div id="resultDiv">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
+    </body>
+</html>
