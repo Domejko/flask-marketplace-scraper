@@ -44,7 +44,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - run: |
-          echo "This is a file to upload" > testing/file.txt
+          echo "This is a file to upload" > tests/functional/test_response.txt
           echo "artifactPath=tests/functional/test_response.txt" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v3
         with:
