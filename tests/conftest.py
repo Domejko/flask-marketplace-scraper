@@ -1,3 +1,4 @@
+import os
 import typing
 from unittest import mock
 
@@ -36,7 +37,11 @@ def search_engine() -> SearchEngine:
 
 @pytest.fixture
 def response(monkeypatch: MonkeyPatch) -> (bytes, str):
-    with open('functional/test_response.txt', 'rb') as f:
+    if os.path.isdir('./functional'):
+        path = './functional/test_response.txt'
+    else:
+        path = 'tests/functional/test_response.txt'
+    with open(path, 'rb') as f:
         response = f.read()
 
     return response, ''
