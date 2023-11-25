@@ -1,7 +1,7 @@
 # Marketplace Scraper
 
 A simple Flask web application for scraping products from **Amazon.nl**, **eBay.nl** and **Marktplaats.nl**. Provides
-a division into used and used products and returns date in table format.
+a division into new and used products and returns results in table format.
 
 ## Installing
 
