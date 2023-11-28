@@ -122,7 +122,7 @@ class SearchEngine:
         """
         result = self.url_search(search_string)
 
-        if len(result) == 0:
+        if not result:
             return False
 
         for soup in result:
@@ -181,7 +181,7 @@ class SearchEngine:
         """
         links_list = self.get_links(search_string)
 
-        if len(links_list) == 0:
+        if not links_list:
             return False
 
         for link in links_list:
@@ -259,7 +259,7 @@ class SearchEngine:
             except ValueError:
                 continue
 
-    def page_search(self, search_string: str) -> list[dict]:
+    def page_search(self, search_string: str, add_to_database: bool = False) -> list[dict]:
         """
         Description:
             Performs a page-based search, scrapes data from subsequent pages, and saves the data to the database.
@@ -268,6 +268,8 @@ class SearchEngine:
 
         Parameters:
             search_string (str): The search string used to search for items on the webpage.
+            add_to_database (bool): A bool that define should search result be saved to SQL database. Default value
+                                    is False.
 
         Returns:
             items_list (list[dict]): A list of dictionaries containing the scraped data from subsequent pages.
@@ -276,11 +278,12 @@ class SearchEngine:
         if not items_list:
             return [{'Msg': 'No Results Found.'}]
 
-        self.save_to_database(items_list)
+        if add_to_database:
+            self.save_to_database(items_list)
 
         return items_list
 
-    def main_search(self, search_string: str) -> list[dict]:
+    def main_search(self, search_string: str, add_to_database: bool = False) -> list[dict]:
         """
         Description:
             Performs a main page search, scrapes data from the main page, and saves the data to the database.
@@ -289,6 +292,8 @@ class SearchEngine:
 
         Parameters:
             search_string (str): The search string used to search for items on the main page.
+            add_to_database (bool): A bool that define should search result be saved to SQL database. Default value
+                                    is False.
 
         Returns:
             items_list (list[dict]): A list of dictionaries containing the scraped data from the main page.
@@ -297,6 +302,7 @@ class SearchEngine:
         if not items_list:
             return [{'Msg': 'No Results Found.'}]
 
-        self.save_to_database(items_list)
+        if add_to_database:
+            self.save_to_database(items_list)
 
         return items_list
