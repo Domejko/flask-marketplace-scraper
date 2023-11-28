@@ -20,7 +20,7 @@ a division into new and used products and returns results in table format.
 
 ## Running with uWSGI
 
-Run
+Run:
 
     uwsgi app.ini
 
