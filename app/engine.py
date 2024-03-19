@@ -2,6 +2,8 @@ import re
 import types
 import functools
 import operator
+
+from typing import Callable
 from bs4 import BeautifulSoup
 from sqlalchemy.exc import IntegrityError
 
@@ -132,9 +134,7 @@ class SearchEngine:
                 if result_dict['Link'] == f'{self.base_url}None':
                     raise ValueError
                 self.items_list.append(result_dict)
-            except AttributeError:
-                continue
-            except ValueError:
+            except (AttributeError, ValueError):
                 continue
 
         return self.items_list
@@ -192,9 +192,7 @@ class SearchEngine:
                 result_dict = self.find_tags(soup, self.page_tags)
                 result_dict['Link'] = link
                 self.items_list.append(result_dict)
-            except AttributeError:
-                continue
-            except ValueError:
+            except (AttributeError, ValueError):
                 continue
 
         return self.items_list
@@ -254,36 +252,10 @@ class SearchEngine:
                 session.add(data)
                 session.commit()
 
-            except IntegrityError:
-                continue
-            except ValueError:
+            except (IntegrityError, ValueError):
                 continue
 
-    def page_search(self, search_string: str, add_to_database: bool = False) -> list[dict]:
-        """
-        Description:
-            Performs a page-based search, scrapes data from subsequent pages, and saves the data to the database.
-            If page_scrape() haven't found any results then it returns bool and page_search returns 'No Results Found'
-            message, else it returns a list of dictionaries containing the scraped data.
-
-        Parameters:
-            search_string (str): The search string used to search for items on the webpage.
-            add_to_database (bool): A bool that define should search result be saved to SQL database. Default value
-                                    is False.
-
-        Returns:
-            items_list (list[dict]): A list of dictionaries containing the scraped data from subsequent pages.
-        """
-        items_list = self.page_scrape(search_string)
-        if not items_list:
-            return [{'Msg': 'No Results Found.'}]
-
-        if add_to_database:
-            self.save_to_database(items_list)
-
-        return items_list
-
-    def main_search(self, search_string: str, add_to_database: bool = False) -> list[dict]:
+    def search(self, search_func: Callable, search_string: str, add_to_database: bool = False) -> list[dict]:
         """
         Description:
             Performs a main page search, scrapes data from the main page, and saves the data to the database.
@@ -291,6 +263,7 @@ class SearchEngine:
             'No Results Found' message, else it returns a list of dictionaries containing the scraped data.
 
         Parameters:
+            search_func (function): Scraping function.
             search_string (str): The search string used to search for items on the main page.
             add_to_database (bool): A bool that define should search result be saved to SQL database. Default value
                                     is False.
@@ -298,7 +271,7 @@ class SearchEngine:
         Returns:
             items_list (list[dict]): A list of dictionaries containing the scraped data from the main page.
         """
-        items_list = self.main_page_scrape(search_string)
+        items_list = search_func(search_string)
         if not items_list:
             return [{'Msg': 'No Results Found.'}]
 

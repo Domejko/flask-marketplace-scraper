@@ -4,6 +4,7 @@ import operator
 import app.amazon_scrape
 import app.ebay_scrape
 import app.marktplaats_scrape
+from app.engine import SearchEngine
 
 
 def run_search(query: str, item_condition: int = 0) -> list[dict]:
@@ -48,10 +49,14 @@ def run_search(query: str, item_condition: int = 0) -> list[dict]:
     if item_condition != 0:
         item_condition -= 1
 
-    products_found = [app.marktplaats_scrape.marktplaats(item_condition).main_search(query),
-                      app.ebay_scrape.ebay(item_condition).main_search(query),
-                      app.amazon_scrape.amazon(item_condition).page_search(query) if item_condition in [1, 2]
-                      else app.amazon_scrape.amazon(item_condition).main_search(query)]
+    mk = app.marktplaats_scrape.marktplaats(item_condition)
+    eb = app.ebay_scrape.ebay(item_condition)
+    am = app.amazon_scrape.amazon(item_condition)
+
+    products_found = [mk.search(mk.main_page_scrape, query),
+                      eb.search(eb.main_page_scrape, query),
+                      am.search(am.page_scrape, query) if item_condition in [1, 2]
+                      else am.search(am.main_page_scrape, query)]
 
     try:
         search_result = functools.reduce(operator.iconcat, products_found, [])
