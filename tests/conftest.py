@@ -94,7 +94,13 @@ def client(my_app: Flask) -> Flask:
 @pytest.fixture()
 def mock_marktplaats() -> mock.Mock:
     class MockMarktplaats:
-        def main_search(self, query):
+        def search(self, search_func, query):
+            return [{'Item': 'iPhone 11',
+                     'Price': 699.99,
+                     'Link': 'https://marktplaats.nl/iPhone',
+                     'Img': 'https://marktplaats.nl/iPhone.jpg'}]
+
+        def main_page_scrape(self, query):
             return [{'Item': 'iPhone 11',
                      'Price': 699.99,
                      'Link': 'https://marktplaats.nl/iPhone',
@@ -106,7 +112,13 @@ def mock_marktplaats() -> mock.Mock:
 @pytest.fixture()
 def mock_ebay() -> mock.Mock:
     class MockEbay:
-        def main_search(self, query):
+        def search(self, search_func, query):
+            return [{'Item': 'iPhone 11 Pro',
+                     'Price': 999.99,
+                     'Link': 'https://eBay.nl/iPhone',
+                     'Img': 'https://eBay.nl/iPhone.jpg'}]
+
+        def main_page_scrape(self, query):
             return [{'Item': 'iPhone 11 Pro',
                      'Price': 999.99,
                      'Link': 'https://eBay.nl/iPhone',
@@ -118,7 +130,13 @@ def mock_ebay() -> mock.Mock:
 @pytest.fixture()
 def mock_amazon() -> mock.Mock:
     class MockAmazon:
-        def main_search(self, query):
+        def search(self, search_func, query):
+            return [{'Item': 'iPhone XR',
+                     'Price': 599.99,
+                     'Link': 'https://Amazon.nl/iPhone',
+                     'Img': 'Amazon.nl/iPhone.jpg'}]
+
+        def main_page_scrape(self, query):
             return [{'Item': 'iPhone XR',
                      'Price': 599.99,
                      'Link': 'https://Amazon.nl/iPhone',

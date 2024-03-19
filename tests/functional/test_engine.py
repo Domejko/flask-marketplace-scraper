@@ -96,26 +96,26 @@ def test_find_tags_failure(search_engine: Fixture[SearchEngine], soup: Fixture[l
 def test_page_search_with_results(monkeypatch: MonkeyPatch, search_engine: Fixture[SearchEngine]):
     expected_result = [{'Item': 'test item', 'Price': 1599, 'Link': 'test item link'}]
     monkeypatch.setattr(SearchEngine, 'page_scrape', lambda x, y: expected_result)
-    search_result = search_engine.page_search('example')
+    search_result = search_engine.search(search_engine.page_scrape, 'example')
     assert search_result == expected_result
 
 
 def test_page_search_without_results(monkeypatch: MonkeyPatch, search_engine: Fixture[SearchEngine]):
     expected_result = [{'Msg': 'No Results Found.'}]
     monkeypatch.setattr(SearchEngine, 'page_scrape', lambda x, y: False)
-    search_result = search_engine.page_search('example')
+    search_result = search_engine.search(search_engine.page_scrape, 'example')
     assert search_result == expected_result
 
 
 def test_main_search_with_results(monkeypatch: MonkeyPatch, search_engine: Fixture[SearchEngine]):
     expected_result = [{'Item': 'test item', 'Price': 1599, 'Link': 'test item link'}]
     monkeypatch.setattr(SearchEngine, 'main_page_scrape', lambda x, y: expected_result)
-    search_result = search_engine.main_search('example')
+    search_result = search_engine.search(search_engine.main_page_scrape, 'example')
     assert search_result == expected_result
 
 
 def test_main_search_without_results(monkeypatch: MonkeyPatch, search_engine: Fixture[SearchEngine]):
     expected_result = [{'Msg': 'No Results Found.'}]
     monkeypatch.setattr(SearchEngine, 'main_page_scrape', lambda x, y: False)
-    search_result = search_engine.main_search('example')
+    search_result = search_engine.search(search_engine.main_page_scrape, 'example')
     assert search_result == expected_result
