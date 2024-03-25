@@ -153,6 +153,7 @@ class SearchEngine:
         """
         result = self.url_search(search_string)
         expression = build_re_expression(search_string)
+        expression = re.escape(expression)
         temp_link_list = []
 
         for soup in result:
@@ -258,9 +259,9 @@ class SearchEngine:
     def search(self, search_func: Callable, search_string: str, add_to_database: bool = False) -> list[dict]:
         """
         Description:
-            Performs a main page search, scrapes data from the main page, and saves the data to the database.
-            If main_page_scrape() haven't found any results then it returns bool and main_search returns
-            'No Results Found' message, else it returns a list of dictionaries containing the scraped data.
+            Performs a search, scrapes data from the website, and saves them to the database if needed.
+            If main_page_scrape() haven't found any results then search returns 'No Results Found' message,
+            else it returns a list of dictionaries containing the scraped data.
 
         Parameters:
             search_func (function): Scraping function.
