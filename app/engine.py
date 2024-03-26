@@ -153,7 +153,8 @@ class SearchEngine:
         """
         result = self.url_search(search_string)
         expression = build_re_expression(search_string)
-        expression = re.escape(expression)
+        # TODO: Find a way to make re expression more secure or change expression itself to work with .escape
+        # expression = re.escape(expression)
         temp_link_list = []
 
         for soup in result:
