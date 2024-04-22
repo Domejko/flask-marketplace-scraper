@@ -45,8 +45,6 @@ class Config(object):
     TESTING = False
     TEMPLATES_AUTO_RELOAD = True
 
-    # SESSION_COOKIE_SECURE = True
-
 
 class ProductionConfig(Config):
     """
@@ -64,8 +62,6 @@ class DevelopmentConfig(Config):
     ENV = 'development'
     DEBUG = True
 
-    # SESSION_COOKIE_SECURE = False
-
 
 class TestingConfig(Config):
     """
@@ -73,7 +69,6 @@ class TestingConfig(Config):
         Flask configuration class.
     """
     TESTING = True
-    # SESSION_COOKIE_SECURE = False
 
 
 def get_config(config: str) -> Type[Config]:
