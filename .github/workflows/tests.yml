@@ -1,5 +1,4 @@
-name: Build and Test Code
-
+name: Tests
 on:
   push:
     branches:
@@ -7,9 +6,8 @@ on:
   pull_request:
     branches:
       - 'main'
-
 jobs:
-  Build:
+  test:
     environment:
       name: testing
     env:
@@ -34,17 +32,20 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
-      - name: Pulling git repo
-        uses: actions/checkout@v2
-
-      - name: Update pip
+      - name: Clone repo
+        uses: actions/checkout@v4.1.4
+      - name: Set up python
+        uses: actions/setup-python@v5.1.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Upgrade pip
         run: pip install --upgrade pip
-
       - name: Installing dependencies
         run: pip install -r requirements.txt
-
-      - name: Testing with Pytest
-        run: |
-          pip install pytest
-          pytest -v
+      - name: Run tests
+        run: pytest -v
