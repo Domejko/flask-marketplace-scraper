@@ -15,8 +15,8 @@ a division into new and used products and returns results in table format.
 
 ### Saving results to SQL database
 
-- Add `.env` file with your db setup corresponding to Settings class format from `config.py`.
-- In `main.py` to `run_search()` function and set parameter `add_to_database` to `True`.
+- Add `.env` file with your db setup corresponding to `Settings` class format from `config.py`.
+- In **main.py** `run_search()` function set parameter `add_to_database` to `True`.
 
 ## Running with uWSGI
 
