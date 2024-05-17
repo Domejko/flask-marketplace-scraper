@@ -59,10 +59,14 @@ def connection(url: str) -> (bytes, Response):
         MissingSchema: If the URL passed as the parameter does not have a valid schema (e.g., "http://" or
         "https://"), a MissingSchema exception is raised.
     """
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'}
+
     try:
-        response = requests.get(url)
+        response = requests.get(url, headers=headers)
         counter = 0
+        print(response.status_code)
         while response.status_code != 200:
+            print(url)
             counter += 1
             response = requests.get(url)
             if counter == 20:
