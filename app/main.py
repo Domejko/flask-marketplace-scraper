@@ -1,4 +1,3 @@
-import functools
 import operator
 import queue
 import threading
@@ -6,7 +5,6 @@ import threading
 import app.amazon_scrape
 import app.ebay_scrape
 import app.marktplaats_scrape
-from app.engine import SearchEngine
 
 
 def search_and_append_result(search_func, result_list, *args, **kwargs):
@@ -67,13 +65,17 @@ def run_search(query: str, item_condition: int = 0) -> list[dict]:
     search_queue = queue.Queue()
     for marketplace, search_func in zip([mk, eb, am], [mk.search, eb.search, am.search]):
         search_queue.put((search_func, search_results,
-                          marketplace.main_page_scrape
-                          if marketplace != am and item_condition not in [1, 2]
-                          else marketplace.page_scrape, query))
+                          marketplace, query))
 
     for _ in range(num_threads):
-        func, results, scraper, query = search_queue.get()
-        thread = threading.Thread(target=search_and_append_result, args=(func, results, scraper, query))
+        func, results, marketplace, query = search_queue.get()
+
+        if marketplace == am and item_condition in [1, 2]:
+            scraper_func = marketplace.page_scrape
+        else:
+            scraper_func = marketplace.main_page_scrape
+
+        thread = threading.Thread(target=search_and_append_result, args=(func, results, scraper_func, query))
         threads.append(thread)
         thread.start()
 
@@ -81,7 +83,6 @@ def run_search(query: str, item_condition: int = 0) -> list[dict]:
         thread.join()
 
     try:
-        # search_results = functools.reduce(operator.iconcat, search_results, [])
         search_results = sorted(search_results, key=operator.itemgetter('Price'), reverse=True)
     except KeyError:
         return search_results
