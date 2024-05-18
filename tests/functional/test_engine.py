@@ -101,7 +101,7 @@ def test_page_search_with_results(monkeypatch: MonkeyPatch, search_engine: Fixtu
 
 
 def test_page_search_without_results(monkeypatch: MonkeyPatch, search_engine: Fixture[SearchEngine]):
-    expected_result = [{'Msg': 'No Results Found.'}]
+    expected_result = [{'Msg': 'No Results Found. http://www.amazon.nl/s?k={search}&page={page}'}]
     monkeypatch.setattr(SearchEngine, 'page_scrape', lambda x, y: False)
     search_result = search_engine.search(search_engine.page_scrape, 'example')
     assert search_result == expected_result
@@ -115,7 +115,7 @@ def test_main_search_with_results(monkeypatch: MonkeyPatch, search_engine: Fixtu
 
 
 def test_main_search_without_results(monkeypatch: MonkeyPatch, search_engine: Fixture[SearchEngine]):
-    expected_result = [{'Msg': 'No Results Found.'}]
+    expected_result = [{'Msg': 'No Results Found. http://www.amazon.nl/s?k={search}&page={page}'}]
     monkeypatch.setattr(SearchEngine, 'main_page_scrape', lambda x, y: False)
     search_result = search_engine.search(search_engine.main_page_scrape, 'example')
     assert search_result == expected_result

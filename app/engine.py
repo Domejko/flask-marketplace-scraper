@@ -275,7 +275,7 @@ class SearchEngine:
         """
         items_list = search_func(search_string)
         if not items_list:
-            return [{'Msg': 'No Results Found.'}]
+            return [{'Msg': f'No Results Found. {self.url}'}]
 
         if add_to_database:
             self.save_to_database(items_list)

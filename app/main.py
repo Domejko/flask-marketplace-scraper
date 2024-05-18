@@ -1,10 +1,15 @@
-import functools
 import operator
+import queue
+import threading
 
 import app.amazon_scrape
 import app.ebay_scrape
 import app.marktplaats_scrape
-from app.engine import SearchEngine
+
+
+def search_and_append_result(search_func, result_list, *args, **kwargs):
+    result = search_func(*args, **kwargs)
+    result_list.extend(result)
 
 
 def run_search(query: str, item_condition: int = 0) -> list[dict]:
@@ -46,6 +51,10 @@ def run_search(query: str, item_condition: int = 0) -> list[dict]:
 
         {'Item': 'iPhone XR', 'Price': 599.99, 'Link': 'https://Amazon.nl/iPhone', 'Img': 'Amazon.nl/iPhone.jpg'}]
     """
+    num_threads = 3
+    threads = []
+    search_results = []
+
     if item_condition != 0:
         item_condition -= 1
 
@@ -53,15 +62,29 @@ def run_search(query: str, item_condition: int = 0) -> list[dict]:
     eb = app.ebay_scrape.ebay(item_condition)
     am = app.amazon_scrape.amazon(item_condition)
 
-    products_found = [mk.search(mk.main_page_scrape, query),
-                      eb.search(eb.main_page_scrape, query),
-                      am.search(am.page_scrape, query) if item_condition in [1, 2]
-                      else am.search(am.main_page_scrape, query)]
+    search_queue = queue.Queue()
+    for marketplace, search_func in zip([mk, eb, am], [mk.search, eb.search, am.search]):
+        search_queue.put((search_func, search_results,
+                          marketplace, query))
+
+    for _ in range(num_threads):
+        func, results, marketplace, query = search_queue.get()
+
+        if marketplace == am and item_condition in [1, 2]:
+            scraper_func = marketplace.page_scrape
+        else:
+            scraper_func = marketplace.main_page_scrape
+
+        thread = threading.Thread(target=search_and_append_result, args=(func, results, scraper_func, query))
+        threads.append(thread)
+        thread.start()
+
+    for thread in threads:
+        thread.join()
 
     try:
-        search_result = functools.reduce(operator.iconcat, products_found, [])
-        search_result = sorted(search_result, key=operator.itemgetter('Price'), reverse=True)
+        search_results = sorted(search_results, key=operator.itemgetter('Price'), reverse=True)
     except KeyError:
-        return products_found[0]
+        return search_results
 
-    return search_result
+    return search_results
