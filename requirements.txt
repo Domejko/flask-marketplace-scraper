@@ -46,5 +46,5 @@ uWSGI==2.0.23
 w3lib==2.1.2
 webencodings==0.5.1
 websockets==10.4
-Werkzeug==3.0.3
+Werkzeug==3.0.6
 zipp==3.19.1
